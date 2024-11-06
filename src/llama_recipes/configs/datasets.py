@@ -9,6 +9,7 @@ class flores_dataset:
     dataset: str = "flores_dataset"
     train_split: str = "train"
     test_split: str = "test"
+    lang_pairs: list = ("en-de", "en-zh", "en-ar")
 
 
 @dataclass

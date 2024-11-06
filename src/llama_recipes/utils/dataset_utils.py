@@ -9,7 +9,7 @@ from llama_recipes.utils.config_utils import get_dataloader_kwargs
 
 
 def get_preprocessed_dataset(
-    tokenizer, dataset_config, split: str = "train"
+    tokenizer, dataset_config, split: str = "train", *args
 ) -> torch.utils.data.Dataset:
     if not dataset_config.dataset in DATASET_PREPROC:
         raise NotImplementedError(f"{dataset_config.dataset} is not (yet) implemented")
@@ -25,6 +25,7 @@ def get_preprocessed_dataset(
         dataset_config,
         tokenizer,
         get_split(),
+        *args
     )
 
 def get_custom_data_collator(
