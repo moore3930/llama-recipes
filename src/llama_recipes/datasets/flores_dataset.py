@@ -62,13 +62,17 @@ def load_flores(split, lang_pairs, _):
 def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
     dataset = load_flores(split, lang_pairs)
 
+    lang_name = {"en": "English", "zh": "Chinese", "ar": "Arabic"}
+
     prompt = (
-        f"### Translate this sentence from {{src_lang}} to {{tgt_lang}}, Source:\n{{src}}\n### Target:"
+        f"Translate this from {{src_lang}} to {{tgt_lang}}:\n{{src_lang}}: {{src}}\n{{tgt_lang}}: "
     )
 
     def apply_prompt_template(sample):
         return {
-            "prompt": prompt.format(src_lang=sample["src_lang"], tgt_lang=sample["tgt_lang"], src=sample["src"]),
+            "prompt": prompt.format(src_lang=lang_name[sample["src_lang"]],
+                                    tgt_lang=lang_name[sample["tgt_lang"]],
+                                    src=sample["src"]),
             "summary": sample["tgt"],
         }
 
