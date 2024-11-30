@@ -8,7 +8,7 @@ from dataclasses import dataclass
 class flores_dataset:
     dataset: str = "flores_dataset"
     train_split: str = "train"
-    test_split: str = "test"
+    test_split: str = "valid"
     lang_pairs: list = ("en-de", "de-en", "en-zh", "zh-en")
 
 
