@@ -2,6 +2,7 @@
 # This software may be used and distributed according to the terms of the Llama 2 Community License Agreement.
 
 import os
+import shutil
 import sys
 import time
 
@@ -14,6 +15,7 @@ from llama_recipes.inference.model_utils import load_model, load_peft_model
 
 from llama_recipes.inference.safety_utils import AgentType, get_safety_checker
 from transformers import AutoTokenizer
+from llama_recipes.data.concatenator import ConcatDataset
 
 from llama_recipes.utils.dataset_utils import (
     get_custom_data_collator,
@@ -33,6 +35,19 @@ from llama_recipes.utils.config_utils import (
     get_dataloader_kwargs,
     update_config,
 )
+
+
+def create_clean_dir(path):
+    """
+    Create a clean directory. If the directory exists, remove it first.
+    :param path: Path of the directory to create.
+    """
+    # Remove the directory if it exists
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    # Create the directory
+    os.makedirs(path)
+
 
 def main(
         model_name,
@@ -140,7 +155,7 @@ def main(
             test_config, dataset_test, tokenizer, "eval"
         )
 
-        # Create DataLoaders for the training and validation dataset
+        # Create DataLoaders for inference
         test_dataloader = torch.utils.data.DataLoader(
             dataset_test,
             num_workers=test_config.num_workers_dataloader,
@@ -157,6 +172,7 @@ def main(
 
         # dump results
         src, tgt = lang_pair.split("-")
+        create_clean_dir(os.path.join(output_dir, lang_pair))
         output_file = os.path.join(output_dir, lang_pair, "hyp.{}-{}.{}".format(src, tgt, tgt))
         with open(output_file, 'w') as fout:
             for line in results:

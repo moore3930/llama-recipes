@@ -12,7 +12,7 @@ class train_config:
     low_cpu_fsdp: bool=False # saves cpu memory by loading pretrained model on rank0 only
     run_validation: bool=True
     batch_size_training: int=4
-    batching_strategy: str="packing" #alternative: padding
+    batching_strategy: str="padding" #alternative: padding or packing
     context_length: int=4096
     gradient_accumulation_steps: int=1
     gradient_clipping: bool = False
@@ -28,7 +28,7 @@ class train_config:
     use_fp16: bool=False
     mixed_precision: bool=True
     val_batch_size: int=1
-    dataset = "samsum_dataset"
+    dataset = "flores_dataset"
     peft_method: str = "lora" # None, llama_adapter (Caution: llama_adapter is currently not supported with FSDP)
     use_peft: bool=False # use parameter efficient fine tuning
     from_peft_checkpoint: str="" # if not empty and use_peft=True, will load the peft checkpoint and resume the fine-tuning on that checkpoint
