@@ -293,6 +293,8 @@ def main(**kwargs):
         elif torch.cuda.is_available():
             model.to("cuda")
     dataset_config = generate_dataset_config(train_config, kwargs)
+    dataset_config["mode"] = "train"
+
     if is_vision:
         dataset_processer = processor
     else:
