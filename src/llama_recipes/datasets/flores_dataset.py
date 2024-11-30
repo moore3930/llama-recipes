@@ -28,7 +28,7 @@ random.seed(42)
 def load_flores(split, lang_pairs, _):
     assert split in ["train", "valid"], f"Unknown split: {split}"
 
-    dir_name = "/Users/moore/workplace/projects/llama-recipes/customer_data/flores200_dataset"
+    dir_name = "/llama_recipes/customer_data/flores200_dataset"
     output_dataset = []
     for lp in lang_pairs:
         src, tgt = lp.split("-")
