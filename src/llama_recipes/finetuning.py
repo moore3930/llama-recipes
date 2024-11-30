@@ -313,7 +313,7 @@ def main(**kwargs):
     dataset_val = get_preprocessed_dataset(
         dataset_processer,
         dataset_config,
-        split="test",
+        split="valid",
         lang_pairs=lang_pairs,
     )
     if not train_config.enable_fsdp or rank == 0:
