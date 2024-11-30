@@ -28,7 +28,9 @@ random.seed(42)
 def load_wmt22_test(split, lang_pairs, _):
     assert split == "test", f"Unknown split: {split}"
 
-    dir_name = "/llama_recipes/customer_data/wmt22_testset"
+    current_file_path = os.path.abspath(__file__)
+    current_dir = os.path.dirname(current_file_path)
+    dir_name = os.path.join(current_dir, "..", "customer_data", "wmt22_testset")
     output_dataset = []
     for lp in lang_pairs:
         src, tgt = lp.split("-")
