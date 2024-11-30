@@ -115,11 +115,12 @@ def main(
                     **kwargs,
                 )
 
-                batch_output = tokenizer.decode(batch_output, skip_special_tokens=True)
+                # batch_output = tokenizer.decode(batch_output, skip_special_tokens=True)
+                batch_output = [tokenizer.decode(output, skip_special_tokens=True) for output in batch_output]
+
                 output += batch_output
 
         return output
-
 
     # TODO, inference for each dataset
     output = {}
