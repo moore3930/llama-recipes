@@ -299,11 +299,13 @@ def main(**kwargs):
         dataset_processer = tokenizer
 
     # Load and preprocess the dataset for training and validation
+    lang_pairs = dataset_config.lang_pairs
 
     dataset_train = get_preprocessed_dataset(
         dataset_processer,
         dataset_config,
         split="train",
+        lang_pairs=lang_pairs,
     )
     if not train_config.enable_fsdp or rank == 0:
         print(f"--> Training Set Length = {len(dataset_train)}")
@@ -312,6 +314,7 @@ def main(**kwargs):
         dataset_processer,
         dataset_config,
         split="test",
+        lang_pairs=lang_pairs,
     )
     if not train_config.enable_fsdp or rank == 0:
         print(f"--> Validation Set Length = {len(dataset_val)}")

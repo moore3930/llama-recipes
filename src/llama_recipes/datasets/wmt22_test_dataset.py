@@ -25,10 +25,10 @@ from unittest.mock import patch
 random.seed(42)
 
 @patch('builtins.input', return_value="N")
-def load_flores(split, lang_pairs, _):
-    assert split in ["train", "valid"], f"Unknown split: {split}"
+def load_wmt22_test(split, lang_pairs, _):
+    assert split == "test", f"Unknown split: {split}"
 
-    dir_name = "/Users/moore/workplace/projects/llama-recipes/customer_data/flores200_dataset"
+    dir_name = "/Users/moore/workplace/projects/llama-recipes/customer_data/wmt22_testset"
     output_dataset = []
     for lp in lang_pairs:
         src, tgt = lp.split("-")
@@ -49,8 +49,8 @@ def load_flores(split, lang_pairs, _):
     return dataset
 
 
-def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
-    dataset = load_flores(split, lang_pairs)
+def get_preprocessed_wmt22_test(dataset_config, tokenizer, split, lang_pairs):
+    dataset = load_wmt22_test(split, lang_pairs)
 
     lang_name = {"en": "English", "zh": "Chinese", "ar": "Arabic", "de": "German",
                  "cs": "Czech", "ru": "Russian", "is": "Icelandic"}
@@ -87,7 +87,7 @@ def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
 
 # Unit Test
 lang_pairs = ["en-de", "en-cs", "en-zh"]
-print(load_flores("train", lang_pairs)[0])
+print(load_wmt22_test("test", lang_pairs)[0])
 
 train_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()
 
@@ -100,7 +100,7 @@ tokenizer = AutoTokenizer.from_pretrained(
 if not tokenizer.pad_token_id:
     tokenizer.pad_token_id = tokenizer.eos_token_id
 
-dataset = get_preprocessed_flores(None, tokenizer, "train", lang_pairs)
+dataset = get_preprocessed_wmt22_test(None, tokenizer, "test", lang_pairs)
 print(dataset[0])
 output_text = tokenizer.decode(dataset[0]['input_ids'])
 print(output_text)

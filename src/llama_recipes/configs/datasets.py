@@ -13,6 +13,13 @@ class flores_dataset:
 
 
 @dataclass
+class wmt22_testset_dataset:
+    dataset: str = "wmt22_testset"
+    test_split: str = "test"
+    lang_pairs: list = ("cs-en", "de-en", "is-en", "ru-en", "zh-en", "en-cs", "en-de", "en-is", "en-ru", "en-zh")
+
+
+@dataclass
 class samsum_dataset:
     dataset: str =  "samsum_dataset"
     train_split: str = "train"

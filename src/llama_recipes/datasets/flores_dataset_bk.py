@@ -22,22 +22,32 @@ from transformers import (
 
 from unittest.mock import patch
 
+lang_map = {"en": "eng_Latn", "de": "deu_Latn", "ar": "ace_Arab", "zh": "zho_Hans"}
 random.seed(42)
 
 @patch('builtins.input', return_value="N")
 def load_flores(split, lang_pairs, _):
-    assert split in ["train", "valid"], f"Unknown split: {split}"
+    if split == "train":
+        cur_split = "dev"
+    elif split == "test":
+        cur_split = "devtest"
 
     dir_name = "/Users/moore/workplace/projects/llama-recipes/customer_data/flores200_dataset"
     output_dataset = []
     for lp in lang_pairs:
         src, tgt = lp.split("-")
-        pair_name = "{}-{}".format(src, tgt)
-        src_name = "{}.{}-{}.{}".format(split, src, tgt, src)
-        tgt_name = "{}.{}-{}.{}".format(split, src, tgt, tgt)
+        assert src in lang_map.keys(), f"Unknown dataset: {src}"
+        assert tgt in lang_map.keys(), f"Unknown dataset: {tgt}"
 
-        with open(os.path.join(dir_name, split, pair_name, src_name)) as src_fin, \
-                open(os.path.join(dir_name, split, pair_name, tgt_name)) as tgt_fin:
+        if cur_split == "dev":
+            src_name = "{}.dev".format(lang_map[src])
+            tgt_name = "{}.dev".format(lang_map[tgt])
+        elif cur_split == "devtest":
+            src_name = "{}.devtest".format(lang_map[src])
+            tgt_name = "{}.devtest".format(lang_map[tgt])
+
+        with open(os.path.join(dir_name, cur_split, src_name)) as src_fin, \
+                open(os.path.join(dir_name, cur_split, tgt_name)) as tgt_fin:
             for src_sent, tgt_sent in zip(src_fin, tgt_fin):
                 src_sent = src_sent.strip()
                 tgt_sent = tgt_sent.strip()
@@ -52,8 +62,7 @@ def load_flores(split, lang_pairs, _):
 def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
     dataset = load_flores(split, lang_pairs)
 
-    lang_name = {"en": "English", "zh": "Chinese", "ar": "Arabic", "de": "German",
-                 "cs": "Czech", "ru": "Russian", "is": "Icelandic"}
+    lang_name = {"en": "English", "zh": "Chinese", "ar": "Arabic", "de": "German"}
 
     prompt = (
         f"Translate this from {{src_lang}} to {{tgt_lang}}:\n{{src_lang}}: {{src}}\n{{tgt_lang}}: "
@@ -75,7 +84,7 @@ def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
 
         sample = {
             "input_ids": prompt + summary,
-            "attention_mask": [1] * (len(prompt) + len(summary)),
+            "attention_mask" : [1] * (len(prompt) + len(summary)),
             "labels": [-100] * len(prompt) + summary,
             }
 
@@ -86,7 +95,7 @@ def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
     return dataset
 
 # Unit Test
-lang_pairs = ["en-de", "en-cs", "en-zh"]
+lang_pairs = ["en-de", "en-zh", "en-ar"]
 print(load_flores("train", lang_pairs)[0])
 
 train_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()

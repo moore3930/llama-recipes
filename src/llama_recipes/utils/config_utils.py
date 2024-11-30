@@ -68,11 +68,11 @@ def generate_dataset_config(train_config, kwargs):
 
     assert train_config.dataset in names, f"Unknown dataset: {train_config.dataset}"
 
-    dataset_config = {k:v for k, v in inspect.getmembers(datasets)}[train_config.dataset]()
+    dataset_config = {k: v for k, v in inspect.getmembers(datasets)}[train_config.dataset]()
 
     update_config(dataset_config, **kwargs)
 
-    return  dataset_config
+    return dataset_config
 
 
 def get_dataloader_kwargs(train_config, dataset, dataset_processer, mode):
