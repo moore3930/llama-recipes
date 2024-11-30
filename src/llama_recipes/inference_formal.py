@@ -135,7 +135,7 @@ def main(
         print(f"--> Test Set Length = {len(dataset_test)}")
 
         test_dl_kwargs = get_dataloader_kwargs(
-            test_config, dataset_test, tokenizer, "train"
+            test_config, dataset_test, tokenizer, "eval"
         )
 
         # Create DataLoaders for the training and validation dataset
