@@ -83,7 +83,7 @@ def main(
     test_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()
     update_config((test_config, fsdp_config), **kwargs)
     dataset_config = generate_dataset_config(test_config, kwargs)
-    dataset_config["mode"] = "infer"
+    dataset_config.mode = "infer"
 
     # TODO, batch inference
     def inference_new(
