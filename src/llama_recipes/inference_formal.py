@@ -157,7 +157,7 @@ def main(
         print(f"--> Test Set Length = {len(dataset_test)}")
 
         test_dl_kwargs = get_dataloader_kwargs(
-            test_config, dataset_test, tokenizer, "eval"
+            test_config, dataset_test, tokenizer, "infer"
         )
 
         # Create DataLoaders for inference
@@ -165,6 +165,7 @@ def main(
             dataset_test,
             num_workers=test_config.num_workers_dataloader,
             pin_memory=True,
+            shuffle=False,
             **test_dl_kwargs,
         )
         print(f"--> Num of Training Set Batches loaded = {len(test_dataloader)}")
