@@ -238,7 +238,7 @@ def train(model, train_dataloader, eval_dataloader, tokenizer, optimizer, lr_sch
                         print(f"we are about to save the PEFT modules")
                 else:
                     print(f"we are about to save the PEFT modules")
-                save_peft_checkpoint(model, train_config.output_dir)
+                save_peft_checkpoint(model, os.path.join(train_config.output_dir, epoch))
                 if train_config.enable_fsdp:
                     if rank==0:
                         print(f"PEFT modules are saved in {train_config.output_dir} directory")

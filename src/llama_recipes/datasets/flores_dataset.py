@@ -58,7 +58,7 @@ def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
                  "cs": "Czech", "ru": "Russian", "is": "Icelandic"}
 
     prompt = (
-        f"Translate this from {{src_lang}} to {{tgt_lang}}:\n{{src_lang}}: {{src}}\n{{tgt_lang}}: "
+        f"Translate this from {{src_lang}} to {{tgt_lang}}:\n{{src_lang}}: {{src}}\n{{tgt_lang}}:"
     )
 
     def apply_prompt_template(sample):
@@ -89,7 +89,6 @@ def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
         sample = {
             "input_ids": prompt,
             "attention_mask": [1] * len(prompt),
-            "labels": [-100] * len(prompt),
             }
 
         return sample
