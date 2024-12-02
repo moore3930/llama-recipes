@@ -17,7 +17,7 @@ from transformers import default_data_collator
 from transformers.data import DataCollatorForSeq2Seq
 
 from llama_recipes.configs import datasets, lora_config, llama_adapter_config, prefix_config, train_config
-from llama_recipes.data.sampler import LengthBasedBatchSampler, DistributedLengthBasedBatchSampler
+from llama_recipes.data.sampler import LengthBasedBatchSampler, DistributedLengthBasedBatchSampler, InferenceBatchSampler
 from llama_recipes.datasets import DATASET_PREPROC
 
 def update_config(config, **kwargs):
@@ -91,7 +91,7 @@ def get_dataloader_kwargs(train_config, dataset, dataset_processer, mode):
         else:
             kwargs["batch_sampler"] = LengthBasedBatchSampler(dataset, batch_size, drop_last=True, shuffle=mode=="train")
             if mode == "infer":
-                kwargs["batch_sampler"] = torch.utils.data.BatchSampler(dataset, batch_size, drop_last=False)
+                kwargs["batch_sampler"] = InferenceBatchSampler(dataset, batch_size, drop_last=True, shuffle=False)
         kwargs["collate_fn"] = DataCollatorForSeq2Seq(dataset_processer)
     elif train_config.batching_strategy == "packing":
         if train_config.enable_fsdp:
