@@ -111,6 +111,8 @@ def main(
     ):
         output = []
         for step, batch in enumerate(dataloader):
+            # TODO, dirty
+            batch.pop('labels')
             if is_xpu_available():
                 batch = {k: v.to("xpu") for k, v in batch.items()}
             else:
@@ -163,7 +165,7 @@ def main(
         # Create DataLoaders for inference
         test_dataloader = torch.utils.data.DataLoader(
             dataset_test,
-            num_workers=test_config.num_workers_dataloader,
+            num_workers=0,
             pin_memory=True,
             shuffle=False,
             **test_dl_kwargs,

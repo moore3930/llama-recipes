@@ -2,6 +2,7 @@
 # This software may be used and distributed according to the terms of the Llama 2 Community License Agreement.
 
 import inspect
+import torch
 from dataclasses import asdict
 
 import torch.distributed as dist
@@ -89,6 +90,8 @@ def get_dataloader_kwargs(train_config, dataset, dataset_processer, mode):
             )
         else:
             kwargs["batch_sampler"] = LengthBasedBatchSampler(dataset, batch_size, drop_last=True, shuffle=mode=="train")
+            if mode == "infer":
+                kwargs["batch_sampler"] = torch.utils.data.BatchSampler(dataset, batch_size, drop_last=False)
         kwargs["collate_fn"] = DataCollatorForSeq2Seq(dataset_processer)
     elif train_config.batching_strategy == "packing":
         if train_config.enable_fsdp:
