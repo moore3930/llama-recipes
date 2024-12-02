@@ -100,6 +100,8 @@ def get_preprocessed_flores(dataset_config, tokenizer, split, lang_pairs):
 
     return dataset
 
+
+'''
 # Unit Test
 lang_pairs = ["en-de", "en-cs", "en-zh"]
 print(load_flores("train", lang_pairs)[0])
@@ -119,3 +121,4 @@ dataset = get_preprocessed_flores(None, tokenizer, "train", lang_pairs)
 print(dataset[0])
 output_text = tokenizer.decode(dataset[0]['input_ids'])
 print(output_text)
+'''

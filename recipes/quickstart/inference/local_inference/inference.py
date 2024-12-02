@@ -142,7 +142,9 @@ def main(
             user_prompt = "\n".join(f.readlines())
         inference(user_prompt, temperature, top_p, top_k, max_new_tokens)
     elif not sys.stdin.isatty():
-        user_prompt = "\n".join(sys.stdin.readlines())
+        lines = [line.strip() for line in sys.stdin.readlines()]
+        user_prompt = "\n".join(lines)
+        # user_prompt = "\n".join(sys.stdin.readlines()) # to be aligned with translation prompts
         inference(user_prompt, temperature, top_p, top_k, max_new_tokens)
     else:
         try:
