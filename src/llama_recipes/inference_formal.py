@@ -148,9 +148,11 @@ def main(
 
     # TODO, inference for each dataset
     output = {}
-    lang_pairs = dataset_config.lang_pairs
+
     if lang_pairs is not None:
         lang_pairs = lang_pairs.split(',')
+    else:
+        lang_pairs = dataset_config.lang_pairs
 
     for lang_pair in lang_pairs:
         # Get test data
