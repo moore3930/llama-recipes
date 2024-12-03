@@ -185,6 +185,7 @@ def main(**kwargs):
     if not tokenizer.pad_token_id:
         tokenizer.pad_token_id = tokenizer.eos_token_id
     tokenizer.padding_side = 'left'
+    model.generation_config.pad_token_id = tokenizer.pad_token_id
 
     # If there is a mismatch between tokenizer vocab size and embedding matrix,
     # throw a warning and then expand the embedding matrix

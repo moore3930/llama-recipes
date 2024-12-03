@@ -96,6 +96,7 @@ def main(
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = 'left'
+    model.generation_config.pad_token_id = tokenizer.pad_token_id
 
     # Update the configuration for the training and sharding process
     test_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()
