@@ -75,6 +75,7 @@ def main(
     use_fast_kernels: bool = False,
     # Enable using SDPA from PyTroch Accelerated Transformers, make use Flash Attention and Xformer memory-efficient kernels
     share_gradio: bool = False,  # Enable endpoint creation for gradio.live
+    lang_pairs: str = None,
     output_dir: str = None,
     **kwargs,
 ):
@@ -147,7 +148,11 @@ def main(
 
     # TODO, inference for each dataset
     output = {}
-    for lang_pair in dataset_config.lang_pairs:
+    lang_pairs = dataset_config.lang_pairs
+    if lang_pairs is not None:
+        lang_pairs = lang_pairs.split(',')
+
+    for lang_pair in lang_pairs:
         # Get test data
         print("Processing {} ...".format(lang_pair))
         dataset_test = get_preprocessed_dataset(

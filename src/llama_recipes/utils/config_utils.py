@@ -91,7 +91,7 @@ def get_dataloader_kwargs(train_config, dataset, dataset_processer, mode):
         else:
             kwargs["batch_sampler"] = LengthBasedBatchSampler(dataset, batch_size, drop_last=True, shuffle=mode=="train")
             if mode == "infer":
-                kwargs["batch_sampler"] = InferenceBatchSampler(dataset, batch_size, drop_last=True, shuffle=False)
+                kwargs["batch_sampler"] = InferenceBatchSampler(dataset, batch_size, drop_last=False, shuffle=False)
         kwargs["collate_fn"] = DataCollatorForSeq2Seq(dataset_processer)
     elif train_config.batching_strategy == "packing":
         if train_config.enable_fsdp:
