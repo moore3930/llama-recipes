@@ -300,6 +300,14 @@ def train(model, train_dataloader, eval_dataloader, tokenizer, optimizer, lr_sch
         if train_config.save_metrics:
             save_to_json(metrics_filename, train_step_loss, train_loss, train_step_perplexity, train_prep, val_step_loss, val_loss, val_step_perplexity, val_prep)
 
+        # Early stopping
+        if len(val_loss) == 1:
+            continue
+        elif val_loss[-1] > val_loss[-2]:
+            print("Performance drops from Epoch {}, early stop.")
+            break
+
+
     avg_epoch_time = sum(epoch_times)/ len(epoch_times)
     avg_checkpoint_time = sum(checkpoint_times)/ len(checkpoint_times) if len(checkpoint_times) > 0 else 0
     avg_train_prep = sum(train_prep)/len(train_prep)
