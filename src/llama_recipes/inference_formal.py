@@ -136,10 +136,11 @@ def main(
                     **kwargs,
                 )
 
-                prompt_len = batch['attention_mask'].sum(-1)
+                # prompt_len = batch['attention_mask'].sum(-1)
 
-                batch_output = [tokenizer.decode(output[idx:], skip_special_tokens=True)
-                                for idx, output in zip(prompt_len, batch_output)]
+                batch_len = batch['input_ids'].shape[-1]
+                batch_output = batch_output[:, batch_len:]
+                batch_output = [tokenizer.decode(output, skip_special_tokens=True) for output in batch_output]
 
                 # replace \n with \t to read when hallucinating
                 batch_output = [sent.replace("\n", "\t").strip() for sent in batch_output]
