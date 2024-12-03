@@ -15,6 +15,7 @@ from llama_recipes.inference.model_utils import load_model, load_peft_model
 
 from llama_recipes.inference.safety_utils import AgentType, get_safety_checker
 from transformers import AutoTokenizer
+
 from llama_recipes.data.concatenator import ConcatDataset
 
 from llama_recipes.utils.dataset_utils import (
@@ -94,6 +95,7 @@ def main(
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = 'left'
 
     # Update the configuration for the training and sharding process
     test_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()
