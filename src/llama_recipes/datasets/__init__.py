@@ -9,6 +9,7 @@ from llama_recipes.datasets.custom_dataset import get_custom_dataset,get_data_co
 from llama_recipes.datasets.samsum_dataset import get_preprocessed_samsum as get_samsum_dataset
 from llama_recipes.datasets.flores_dataset import get_preprocessed_flores as get_flores_dataset
 from llama_recipes.datasets.wmt22_test_dataset import get_preprocessed_wmt22_test as get_wmt22_test_dataset
+from llama_recipes.datasets.translation_dataset import get_preprocessed_bitext
 from llama_recipes.datasets.toxicchat_dataset import get_llamaguard_toxicchat_dataset as get_llamaguard_toxicchat_dataset
 DATASET_PREPROC = {
     "alpaca_dataset": partial(get_alpaca_dataset),
@@ -18,6 +19,7 @@ DATASET_PREPROC = {
     "llamaguard_toxicchat_dataset": get_llamaguard_toxicchat_dataset,
     "flores_dataset": get_flores_dataset,
     "wmt22_testset": get_wmt22_test_dataset,
+    "translation_dataset": get_preprocessed_bitext,
 }
 DATALOADER_COLLATE_FUNC = {
     "custom_dataset": get_data_collator

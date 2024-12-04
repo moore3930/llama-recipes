@@ -21,6 +21,7 @@ from llama_recipes.data.concatenator import ConcatDataset
 from llama_recipes.utils.dataset_utils import (
     get_custom_data_collator,
     get_preprocessed_dataset,
+    get_translation_dataset,
 )
 
 from llama_recipes.configs import (
@@ -102,7 +103,6 @@ def main(
     test_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()
     update_config((test_config, fsdp_config), **kwargs)
     dataset_config = generate_dataset_config(test_config, kwargs)
-    dataset_config.mode = "infer"
 
     # TODO, batch inference
     def inference_new(
@@ -161,9 +161,10 @@ def main(
     for lang_pair in lang_pairs:
         # Get test data
         print("Processing {} ...".format(lang_pair))
-        dataset_test = get_preprocessed_dataset(
+        dataset_test = get_translation_dataset(
             tokenizer,
             dataset_config,
+            mode="infer",
             split="test",
             lang_pairs=[lang_pair]
         )

@@ -58,7 +58,7 @@ def get_preprocessed_wmt22_test(dataset_config, tokenizer, split, lang_pairs):
                  "cs": "Czech", "ru": "Russian", "is": "Icelandic"}
 
     prompt = (
-        f"Translate this from {{src_lang}} to {{tgt_lang}}:\n{{src_lang}}: {{src}}\n{{tgt_lang}}: "
+        f"Translate this from {{src_lang}} to {{tgt_lang}}:\n{{src_lang}}: {{src}}\n{{tgt_lang}}:"
     )
 
     def apply_prompt_template(sample):
@@ -83,10 +83,25 @@ def get_preprocessed_wmt22_test(dataset_config, tokenizer, split, lang_pairs):
 
         return sample
 
-    dataset = dataset.map(tokenize_add_label, remove_columns=list(dataset.features))
+    def tokenize_prompt(sample):
+        prompt = tokenizer.encode(tokenizer.bos_token + sample["prompt"], add_special_tokens=False)
+
+        sample = {
+            "input_ids": prompt,
+            "attention_mask": [1] * len(prompt),
+            }
+
+        return sample
+
+    if dataset_config.mode == "infer":
+        dataset = dataset.map(tokenize_prompt, remove_columns=list(dataset.features))
+    else:
+        dataset = dataset.map(tokenize_add_label, remove_columns=list(dataset.features))
 
     return dataset
 
+
+'''
 # Unit Test
 lang_pairs = ["en-de", "en-cs", "en-zh"]
 print(load_wmt22_test("test", lang_pairs)[0])
@@ -106,3 +121,4 @@ dataset = get_preprocessed_wmt22_test(None, tokenizer, "test", lang_pairs)
 print(dataset[0])
 output_text = tokenizer.decode(dataset[0]['input_ids'])
 print(output_text)
+'''

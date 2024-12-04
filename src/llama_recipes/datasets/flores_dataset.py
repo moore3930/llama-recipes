@@ -30,7 +30,7 @@ def load_flores(split, lang_pairs, _):
 
     current_file_path = os.path.abspath(__file__)
     current_dir = os.path.dirname(current_file_path)
-    dir_name = os.path.join(current_dir, "..", "customer_data", "flores200_dataset")
+    dir_name = os.path.join(current_dir, "..", "customer_data", "flores_dataset")
     output_dataset = []
     for lp in lang_pairs:
         src, tgt = lp.split("-")
