@@ -32,6 +32,7 @@ from llama_recipes.utils.config_utils import (
 from llama_recipes.utils.dataset_utils import (
     get_custom_data_collator,
     get_preprocessed_dataset,
+    get_translation_dataset,
 )
 
 from llama_recipes.utils.fsdp_utils import hsdp_device_mesh
@@ -304,18 +305,20 @@ def main(**kwargs):
     # Load and preprocess the dataset for training and validation
     lang_pairs = dataset_config.lang_pairs
 
-    dataset_train = get_preprocessed_dataset(
+    dataset_train = get_translation_dataset(
         dataset_processer,
         dataset_config,
+        mode="train",
         split="train",
         lang_pairs=lang_pairs,
     )
     if not train_config.enable_fsdp or rank == 0:
         print(f"--> Training Set Length = {len(dataset_train)}")
 
-    dataset_val = get_preprocessed_dataset(
+    dataset_val = get_translation_dataset(
         dataset_processer,
         dataset_config,
+        mode="eval",
         split="valid",
         lang_pairs=lang_pairs,
     )
