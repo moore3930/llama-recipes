@@ -13,7 +13,7 @@ class flores_dataset:
 
 
 @dataclass
-class wmt22_testset_dataset:
+class wmt22_testset:
     dataset: str = "wmt22_testset"
     test_split: str = "test"
     lang_pairs: list = ("cs-en", "de-en", "is-en", "ru-en", "zh-en", "en-cs", "en-de", "en-is", "en-ru", "en-zh")
