@@ -160,7 +160,7 @@ def main(
 
     for lang_pair in lang_pairs:
         # Get test data
-        print("Processing {} ...".format(lang_pair))
+        print("Processing {} ...".format(lang_pair), flush=True)
         dataset_test = get_translation_dataset(
             tokenizer,
             dataset_config,
@@ -168,7 +168,7 @@ def main(
             split="test",
             lang_pairs=[lang_pair]
         )
-        print(f"--> Test Set Length = {len(dataset_test)}")
+        print(f"--> Test Set Length = {len(dataset_test)}", flush=True)
 
         test_dl_kwargs = get_dataloader_kwargs(
             test_config, dataset_test, tokenizer, "infer"
@@ -182,12 +182,12 @@ def main(
             shuffle=False,
             **test_dl_kwargs,
         )
-        print(f"--> Num of Training Set Batches loaded = {len(test_dataloader)}")
+        print(f"--> Num of Testing Set Batches loaded = {len(test_dataloader)}", flush=True)
 
         start = time.perf_counter()
         results = inference_new(test_dataloader, temperature, top_p, top_k, max_new_tokens)
         e2e_inference_time = (time.perf_counter() - start) * 1000
-        print(f"the inference time is {e2e_inference_time} ms")
+        print(f"the inference time is {e2e_inference_time} ms", flush=True)
         output[lang_pair] = results
 
         # dump results
