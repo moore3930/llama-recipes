@@ -88,12 +88,21 @@ def main(
         torch.cuda.manual_seed(seed)
     torch.manual_seed(seed)
 
+    # Update the configuration for the training and sharding process
+    test_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()
+    update_config((test_config, fsdp_config), **kwargs)
+    dataset_config = generate_dataset_config(test_config, kwargs)
+
     model = load_model(model_name, quantization, use_fast_kernels, **kwargs)
+
+    if test_config.preload_peft_dir is not None:
+        # merge peft into backbone, may not 100% aligned
+        print("Load and merge peft...")
+        model = load_peft_model(model, test_config.preload_peft_dir)
+        model = model.merge_and_unload()
+
     if peft_model:
         model = load_peft_model(model, peft_model)
-
-        # merge peft into backbone, may not 100% aligned
-        model = model.merge_and_unload()
 
     model.eval()
 
@@ -101,11 +110,6 @@ def main(
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = 'left'
     model.generation_config.pad_token_id = tokenizer.pad_token_id
-
-    # Update the configuration for the training and sharding process
-    test_config, fsdp_config = TRAIN_CONFIG(), FSDP_CONFIG()
-    update_config((test_config, fsdp_config), **kwargs)
-    dataset_config = generate_dataset_config(test_config, kwargs)
 
     # TODO, batch inference
     def inference_new(
