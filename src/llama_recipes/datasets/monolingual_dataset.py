@@ -64,7 +64,7 @@ def get_preprocessed_monolingual_data(tokenizer, dataset_config, mode, split, la
 
     def apply_prompt_template(sample):
         return {
-            "prompt": prompt.format(src_lang=lang_name[sample["src"]]),
+            "prompt": prompt.format(src=sample["src"]),
         }
 
     dataset = dataset.map(apply_prompt_template, remove_columns=list(dataset.features))
