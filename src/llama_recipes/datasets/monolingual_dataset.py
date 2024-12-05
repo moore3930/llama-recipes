@@ -43,7 +43,6 @@ def load_text(dataset_name, split, lang_pairs, _):
                 open(os.path.join(dir_name, split, pair_name, tgt_name)) as tgt_fin:
             for src_sent, tgt_sent in zip(src_fin, tgt_fin):
                 src_sent = src_sent.strip()
-                tgt_sent = tgt_sent.strip()
                 idx_32bit = str(random.randint(-2 ** 31, 2 ** 31 - 1))
                 row = {"id": idx_32bit, "src_lang": src, "src": src_sent}
                 output_dataset.append(row)
@@ -60,12 +59,12 @@ def get_preprocessed_monolingual_data(tokenizer, dataset_config, mode, split, la
                  "cs": "Czech", "ru": "Russian", "is": "Icelandic"}
 
     prompt = (
-        f"{{src_lang}}"
+        f"{{src}}"
     )
 
     def apply_prompt_template(sample):
         return {
-            "prompt": prompt.format(src_lang=lang_name[sample["src_lang"]]),
+            "prompt": prompt.format(src_lang=lang_name[sample["src"]]),
         }
 
     dataset = dataset.map(apply_prompt_template, remove_columns=list(dataset.features))

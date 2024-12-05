@@ -92,7 +92,7 @@ def main(
     if peft_model:
         model = load_peft_model(model, peft_model)
 
-        # merge peft into backbone
+        # merge peft into backbone, may not 100% aligned
         model = model.merge_and_unload()
 
     model.eval()

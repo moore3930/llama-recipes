@@ -307,7 +307,7 @@ def main(**kwargs):
     # Load and preprocess the dataset for training and validation
     lang_pairs = dataset_config.lang_pairs
 
-    dataset_train = get_translation_dataset(
+    dataset_train = get_monolingual_dataset(
         dataset_processer,
         dataset_config,
         mode="train",
@@ -317,7 +317,7 @@ def main(**kwargs):
     if not train_config.enable_fsdp or rank == 0:
         print(f"--> Training Set Length = {len(dataset_train)}")
 
-    dataset_val = get_translation_dataset(
+    dataset_val = get_monolingual_dataset(
         dataset_processer,
         dataset_config,
         mode="eval",

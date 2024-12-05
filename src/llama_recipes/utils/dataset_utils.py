@@ -7,6 +7,7 @@ from llama_recipes.data.concatenator import ConcatDataset
 from llama_recipes.datasets import DATASET_PREPROC, DATALOADER_COLLATE_FUNC
 from llama_recipes.utils.config_utils import get_dataloader_kwargs
 from llama_recipes.datasets.translation_dataset import get_preprocessed_bitext
+from llama_recipes.datasets.monolingual_dataset import get_preprocessed_monolingual_data
 
 
 def get_translation_dataset(
@@ -14,6 +15,19 @@ def get_translation_dataset(
 ) -> torch.utils.data.Dataset:
 
     return get_preprocessed_bitext(
+        tokenizer,
+        dataset_config,
+        mode,
+        split,
+        lang_pairs
+    )
+
+
+def get_monolingual_dataset(
+    tokenizer, dataset_config, mode: str = "train", split: str = "train", lang_pairs: list = ("en-de", "en-zh", "en-ar")
+) -> torch.utils.data.Dataset:
+
+    return get_preprocessed_monolingual_data(
         tokenizer,
         dataset_config,
         mode,
