@@ -65,6 +65,8 @@ from transformers.models.mllama.modeling_mllama import (
     MllamaVisionEncoderLayer,
 )
 
+from llama_recipes.inference.model_utils import load_peft_model
+
 
 def setup_wandb(train_config, fsdp_config, **kwargs):
     try:
@@ -174,6 +176,12 @@ def main(**kwargs):
             ),
             torch_dtype=torch.float16 if train_config.use_fp16 else torch.bfloat16,
         )
+
+        if train_config.preload_peft_dir is not None:
+            # merge peft into backbone, may not 100% aligned
+            model = load_peft_model(model, train_config.preload_peft_dir)
+            model = model.merge_and_unload()
+
     else:
         raise ValueError(
             f"Model type {config.model_type} is not supported. Please use llama or mllama model."
