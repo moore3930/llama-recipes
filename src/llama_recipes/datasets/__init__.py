@@ -20,6 +20,7 @@ DATASET_PREPROC = {
     "flores_dataset": get_flores_dataset,
     "wmt22_testset": get_wmt22_test_dataset,
     "translation_dataset": get_preprocessed_bitext,
+    "human_written_dataset": get_preprocessed_bitext,
 }
 DATALOADER_COLLATE_FUNC = {
     "custom_dataset": get_data_collator

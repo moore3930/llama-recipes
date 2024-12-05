@@ -13,6 +13,13 @@ class flores_dataset:
 
 
 @dataclass
+class human_written_dataset:
+    dataset: str = "human_written_dataset"
+    train_split: str = "train"
+    test_split: str = "valid"
+    lang_pairs: list = ("en-cs", "cs-en", "en-de", "de-en", "en-is", "is-en", "en-ru", "ru-en", "en-zh", "zh-en")
+
+@dataclass
 class wmt22_testset:
     dataset: str = "wmt22_testset"
     test_split: str = "test"

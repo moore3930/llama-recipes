@@ -349,6 +349,7 @@ def main(**kwargs):
     )
     print("length of dataset_train", len(dataset_train))
     custom_data_collator = get_custom_data_collator(dataset_processer, dataset_config)
+
     if custom_data_collator:
         print("custom_data_collator is used")
         train_dl_kwargs["collate_fn"] = custom_data_collator
