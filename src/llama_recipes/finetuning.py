@@ -315,12 +315,10 @@ def main(**kwargs):
 
     # Load and preprocess the dataset for training and validation
     lang_pairs = dataset_config.lang_pairs
-    train_dataset_name = train_config.train_dataset
-    valid_dataset_name = train_config.valid_dataset
 
     dataset_train = get_translation_dataset(
         dataset_processer,
-        train_dataset_name,
+        train_config.dataset,
         mode="train",
         split="train",
         lang_pairs=lang_pairs,
@@ -330,7 +328,7 @@ def main(**kwargs):
 
     dataset_val = get_translation_dataset(
         dataset_processer,
-        valid_dataset_name,
+        train_config.dataset,
         mode="eval",
         split="valid",
         lang_pairs=lang_pairs,
