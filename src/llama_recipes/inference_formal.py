@@ -93,7 +93,7 @@ def main(
         model = load_peft_model(model, peft_model)
 
         # merge peft into backbone
-        model = peft_model.merge_and_unload()
+        model = model.merge_and_unload()
 
     model.eval()
 
