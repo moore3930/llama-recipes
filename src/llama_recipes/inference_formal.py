@@ -170,7 +170,7 @@ def main(
         print("Processing {} ...".format(lang_pair), flush=True)
         dataset_test = get_translation_dataset(
             tokenizer,
-            dataset_config,
+            test_config.dataset,
             mode="infer",
             split="test",
             lang_pairs=[lang_pair]

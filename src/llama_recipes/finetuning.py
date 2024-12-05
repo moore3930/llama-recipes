@@ -348,11 +348,12 @@ def main(**kwargs):
         train_config, dataset_train, dataset_processer, "train"
     )
     print("length of dataset_train", len(dataset_train))
-    custom_data_collator = get_custom_data_collator(dataset_processer, dataset_config)
 
+    custom_data_collator = get_custom_data_collator(dataset_processer, dataset_config)
     if custom_data_collator:
         print("custom_data_collator is used")
         train_dl_kwargs["collate_fn"] = custom_data_collator
+
     # Create DataLoaders for the training and validation dataset
     train_dataloader = torch.utils.data.DataLoader(
         dataset_train,
