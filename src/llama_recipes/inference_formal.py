@@ -92,6 +92,9 @@ def main(
     if peft_model:
         model = load_peft_model(model, peft_model)
 
+        # merge peft into backbone
+        model = peft_model.merge_and_unload()
+
     model.eval()
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)

@@ -25,7 +25,7 @@ from unittest.mock import patch
 random.seed(42)
 
 @patch('builtins.input', return_value="N")
-def load_bitext(dataset_name, split, lang_pairs, _):
+def load_text(dataset_name, split, lang_pairs, _):
     assert split in ["train", "valid", "test"], f"Unknown split: {split}"
 
     current_file_path = os.path.abspath(__file__)
@@ -45,60 +45,43 @@ def load_bitext(dataset_name, split, lang_pairs, _):
                 src_sent = src_sent.strip()
                 tgt_sent = tgt_sent.strip()
                 idx_32bit = str(random.randint(-2 ** 31, 2 ** 31 - 1))
-                row = {"id": idx_32bit, "src_lang": src, "tgt_lang": tgt, "src": src_sent, "tgt": tgt_sent}
+                row = {"id": idx_32bit, "src_lang": src, "src": src_sent}
                 output_dataset.append(row)
 
     dataset = datasets.Dataset.from_list(output_dataset)
     return dataset
 
 
-def get_preprocessed_bitext(tokenizer, dataset_config, mode, split, lang_pairs):
+def get_preprocessed_monolingual_data(tokenizer, dataset_config, mode, split, lang_pairs):
     dataset_name = dataset_config.dataset
-    dataset = load_bitext(dataset_name, split, lang_pairs)
+    dataset = load_text(dataset_name, split, lang_pairs)
 
     lang_name = {"en": "English", "zh": "Chinese", "ar": "Arabic", "de": "German",
                  "cs": "Czech", "ru": "Russian", "is": "Icelandic"}
 
     prompt = (
-        f"Translate this from {{src_lang}} to {{tgt_lang}}:\n{{src_lang}}: {{src}}\n{{tgt_lang}}:"
+        f"{{src_lang}}"
     )
 
     def apply_prompt_template(sample):
         return {
-            "prompt": prompt.format(src_lang=lang_name[sample["src_lang"]],
-                                    tgt_lang=lang_name[sample["tgt_lang"]],
-                                    src=sample["src"]),
-            "summary": sample["tgt"],
+            "prompt": prompt.format(src_lang=lang_name[sample["src_lang"]]),
         }
 
     dataset = dataset.map(apply_prompt_template, remove_columns=list(dataset.features))
 
     def tokenize_add_label(sample):
-        prompt = tokenizer.encode(tokenizer.bos_token + sample["prompt"], add_special_tokens=False)
-        summary = tokenizer.encode(sample["summary"] + tokenizer.eos_token, add_special_tokens=False)
-
-        sample = {
-            "input_ids": prompt + summary,
-            "attention_mask": [1] * (len(prompt) + len(summary)),
-            "labels": [-100] * len(prompt) + summary,
-            }
-
-        return sample
-
-    def tokenize_prompt(sample):
-        prompt = tokenizer.encode(tokenizer.bos_token + sample["prompt"], add_special_tokens=False)
+        prompt = tokenizer.encode(tokenizer.bos_token + sample["prompt"] + tokenizer.eos_token, add_special_tokens=False)
 
         sample = {
             "input_ids": prompt,
             "attention_mask": [1] * len(prompt),
+            "labels": prompt,
             }
 
         return sample
 
-    if mode == "infer":
-        dataset = dataset.map(tokenize_prompt, remove_columns=list(dataset.features))
-    else:
-        dataset = dataset.map(tokenize_add_label, remove_columns=list(dataset.features))
+    dataset = dataset.map(tokenize_add_label, remove_columns=list(dataset.features))
 
     return dataset
 
