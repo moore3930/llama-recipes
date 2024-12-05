@@ -45,7 +45,7 @@ def create_clean_dir(path):
     :param path: Path of the directory to create.
     """
     # Remove the directory if it exists
-    if os.path.exists(path):
+    if os.path.exicreate_clean_dirsts(path):
         shutil.rmtree(path)
     # Create the directory
     os.makedirs(path)
@@ -199,7 +199,7 @@ def main(
 
         # dump results
         src, tgt = lang_pair.split("-")
-        create_clean_dir(os.path.join(output_dir, lang_pair))
+        (os.path.join(output_dir, lang_pair))
         output_file = os.path.join(output_dir, lang_pair, "hyp.{}-{}.{}".format(src, tgt, tgt))
         with open(output_file, 'w') as fout:
             for line in results:

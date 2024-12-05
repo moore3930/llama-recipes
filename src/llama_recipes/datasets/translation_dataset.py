@@ -52,8 +52,8 @@ def load_bitext(dataset_name, split, lang_pairs, _):
     return dataset
 
 
-def get_preprocessed_bitext(tokenizer, dataset_config, mode, split, lang_pairs):
-    dataset_name = dataset_config.dataset
+def get_preprocessed_bitext(tokenizer, dataset_name, mode, split, lang_pairs):
+
     dataset = load_bitext(dataset_name, split, lang_pairs)
 
     lang_name = {"en": "English", "zh": "Chinese", "ar": "Arabic", "de": "German",
