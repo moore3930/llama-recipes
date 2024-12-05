@@ -179,6 +179,7 @@ def main(**kwargs):
 
         if train_config.preload_peft_dir is not None:
             # merge peft into backbone, may not 100% aligned
+            print("Load and merge peft...")
             model = load_peft_model(model, train_config.preload_peft_dir)
             model = model.merge_and_unload()
 
